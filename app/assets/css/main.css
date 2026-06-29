@@ -1,0 +1,673 @@
+@import "tailwindcss";
+
+/* =============================================================================
+   UNFOLDED EVENTS — DESIGN TOKENS
+   Defined once in @theme. Tailwind v4 exposes every token BOTH as a utility
+   (bg-gold, text-ink, font-display, shadow-form…) AND as a CSS custom property
+   (var(--color-gold), var(--shadow-form)…). One source of truth = the design
+   tokens + CSS custom properties asked for in the brief.
+   ============================================================================= */
+@theme {
+  /* ---- Surfaces (light) ---- */
+  --color-ivory: #f4f1ea;        /* page canvas            */
+  --color-paper: #fcfbf7;        /* cards                  */
+  --color-cloud: #fffefb;        /* input fields           */
+  --color-sand: #ece7db;         /* quote section tint     */
+  --color-linen: #efebe0;        /* faq section tint       */
+
+  /* ---- Surfaces (dark) ---- */
+  --color-charcoal: #1b1815;     /* primary dark / gallery */
+  --color-obsidian: #14110d;     /* deepest — hero & footer*/
+
+  /* ---- Ink / text on light ---- */
+  --color-ink: #211e19;          /* headings               */
+  --color-ink-soft: #4a443b;     /* body                   */
+  --color-muted: #5c564c;        /* secondary body         */
+  --color-muted-2: #6b655c;      /* tertiary               */
+  --color-faint: #8c857a;        /* captions / meta        */
+
+  /* ---- Text on dark ---- */
+  --color-cream: #c4bcad;        /* body on dark           */
+  --color-mist: #b7af9f;         /* secondary on dark      */
+  --color-stone: #9a917f;        /* muted on dark          */
+  --color-ash: #7c766a;          /* faint on dark          */
+
+  /* ---- Lines & rules ---- */
+  --color-line: #e7e1d5;         /* card / section borders */
+  --color-hairline: #e0dace;     /* hairline rules         */
+  --color-divider: #efeae0;      /* internal dividers      */
+  --color-field: #dcd5c8;        /* input borders          */
+  --color-line-dark: #2e2a23;    /* borders on dark        */
+
+  /* ---- Gold (display / marks / rules / CTAs only — AA on charcoal) ---- */
+  --color-gold: #b08d57;         /* accent / CTA           */
+  --color-gold-deep: #8a6d3b;    /* gold text on light (AA)*/
+  --color-gold-light: #d8b878;   /* gold on dark           */
+  --color-gold-mid: #c9ac82;     /* gold rules             */
+  --color-gold-ink: #7a5e2e;     /* SMALL gold text on light — AA ≥4.5 (usage token) */
+
+  /* ---- Form error (derived for AA — ~5.8:1 on ivory; not part of the palette) ---- */
+  --color-error: #b42318;        /* error text + icons     */
+  --color-error-surface: #fbeae6;/* error summary tint     */
+  --color-error-border: #e7c9c2; /* error summary border   */
+
+  /* ---- Typefaces ---- */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-display: "Fraunces", ui-serif, Georgia, "Times New Roman", serif;
+
+  /* ---- Radii ---- */
+  --radius-field: 2px;           /* buttons / inputs / chips */
+  --radius-card: 3px;            /* cards / sections         */
+  --radius-form: 4px;            /* form panel               */
+
+  /* ---- Elevation ---- */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-lift: 0 18px 40px -24px rgba(27, 24, 21, 0.28);
+  --shadow-form: 0 22px 46px -28px rgba(27, 24, 21, 0.34);
+
+  /* ---- Easing ---- */
+  --ease-unfold: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* =============================================================================
+   SELF-HOSTED VARIABLE FONTS  (latin subset, font-display: swap)
+   Fraunces = standard subset (opsz + wght) so font-optical-sizing: auto works.
+   Inter    = wght subset (weight axis only) for body text.
+   ============================================================================= */
+@font-face {
+  font-family: "Fraunces";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/fraunces-latin-standard-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Fraunces";
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/fraunces-latin-standard-italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/inter-latin-wght-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/inter-latin-wght-italic.woff2") format("woff2");
+}
+
+/* =============================================================================
+   BASE
+   ============================================================================= */
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-ivory);
+    color: var(--color-ink-soft);
+    font-family: var(--font-sans);
+    font-optical-sizing: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    color: var(--color-ink);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  ::selection {
+    background: var(--color-gold);
+    color: var(--color-obsidian);
+  }
+
+  /* Visible focus for keyboard users — WCAG 2.4.7 */
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+    border-radius: 1px;
+  }
+
+  /* Honour reduced-motion globally (also gates the 3D hero in step 4) */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+/* =============================================================================
+   FOUNDATIONAL COMPONENTS  (the "fold line" motif + layout helpers)
+   ============================================================================= */
+@layer components {
+  /* Centered content column — max 1280, 80px desktop gutters (per comp) */
+  .shell {
+    margin-inline: auto;
+    width: 100%;
+    max-width: 1280px;
+    padding-inline: 1.5rem;
+  }
+  @media (min-width: 640px) {
+    .shell { padding-inline: 2.5rem; }
+  }
+  @media (min-width: 1024px) {
+    .shell { padding-inline: 5rem; } /* 80px */
+  }
+
+  /* Numbered eyebrow ("01 — The Collection") */
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-gold-ink); /* AA-safe small gold text on light */
+  }
+
+  /* The fold-line diamond mark */
+  .diamond {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    transform: rotate(45deg);
+    background: var(--color-gold);
+  }
+  .diamond--hollow {
+    background: transparent;
+    border: 1px solid var(--color-gold);
+  }
+
+  /* A hairline rule that fades into the page — the "seam" */
+  .rule-fade {
+    height: 1px;
+    flex: 1;
+    background: linear-gradient(90deg, var(--color-gold-mid), transparent);
+  }
+  .rule-fade--dark {
+    background: linear-gradient(90deg, #6e5a33, transparent);
+  }
+
+  /* Accessible skip link */
+  .skip-link {
+    position: fixed;
+    top: 0.5rem;
+    left: 0.5rem;
+    z-index: 100;
+    transform: translateY(-150%);
+    background: var(--color-obsidian);
+    color: var(--color-ivory);
+    padding: 0.625rem 1rem;
+    border-radius: var(--radius-field);
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: transform 0.18s var(--ease-unfold);
+  }
+  .skip-link:focus {
+    transform: translateY(0);
+  }
+}
+
+/* =============================================================================
+   SECTION ANCHORING + MEDIA
+   ============================================================================= */
+@layer base {
+  /* Smooth-scroll targets clear the sticky header */
+  section[id],
+  [id].scroll-anchor {
+    scroll-margin-top: 5.5rem;
+  }
+
+  /* Placeholder/real images never cause layout shift */
+  img {
+    height: auto;
+  }
+}
+
+/* =============================================================================
+   UI PRIMITIVES  (raw CSS + tokens — safe everywhere, no @apply needed)
+   ============================================================================= */
+@layer components {
+  /* ---- Buttons ---- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.95rem 1.6rem;
+    border-radius: var(--radius-field);
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition:
+      transform 0.25s var(--ease-unfold),
+      background-color 0.25s var(--ease-unfold),
+      border-color 0.25s var(--ease-unfold),
+      box-shadow 0.25s var(--ease-unfold);
+  }
+  .btn--sm {
+    padding: 0.7rem 1.25rem;
+    font-size: 0.8125rem;
+  }
+  .btn--block {
+    width: 100%;
+  }
+  .btn--gold {
+    background: var(--color-gold);
+    color: var(--color-charcoal);
+  }
+  .btn--gold:hover {
+    background: #c39a60;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lift);
+  }
+  .btn--gold:focus-visible {
+    outline-color: var(--color-charcoal);
+  }
+  .btn--dark {
+    background: var(--color-charcoal);
+    color: var(--color-ivory);
+  }
+  .btn--dark:hover {
+    background: #2a2620;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lift);
+  }
+  .btn--dark:focus-visible {
+    outline-color: var(--color-gold-light);
+  }
+  /* Outline button used on dark backgrounds (hero) */
+  .btn--ghost-light {
+    border-color: #5a5246;
+    color: var(--color-line);
+    font-weight: 500;
+  }
+  .btn--ghost-light:hover {
+    border-color: var(--color-gold-light);
+    color: var(--color-ivory);
+  }
+
+  /* ---- Chips (item pills + category tags) ---- */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.8125rem;
+    padding: 0.5rem 0.875rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-field);
+    background: var(--color-cloud);
+    color: var(--color-ink-soft);
+    cursor: pointer;
+    transition: border-color 0.2s var(--ease-unfold), background-color 0.2s var(--ease-unfold);
+  }
+  .chip:hover {
+    border-color: var(--color-gold-mid);
+  }
+  .chip[aria-pressed="true"],
+  .chip--on {
+    background: var(--color-gold);
+    border-color: var(--color-gold);
+    color: var(--color-charcoal);
+    font-weight: 500;
+  }
+  .chip--tag {
+    cursor: default;
+    font-size: 0.625rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.5rem;
+    color: var(--color-gold-ink);
+    background: var(--color-paper);
+    border-color: var(--color-hairline);
+    border-radius: var(--radius-field);
+  }
+
+  /* ---- Form fields ---- */
+  .label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-ink-soft);
+    margin-bottom: 0.4rem;
+  }
+  .field {
+    width: 100%;
+    padding: 0.75rem 0.875rem;
+    border: 1px solid var(--color-field);
+    border-radius: var(--radius-field);
+    background: var(--color-cloud);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+  .field::placeholder {
+    color: var(--color-faint);
+  }
+  .field:focus {
+    border-color: var(--color-gold);
+    outline: 2px solid var(--color-gold);
+    outline-offset: 1px;
+  }
+
+  /* ---- Card ---- */
+  .card {
+    background: var(--color-paper);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+  }
+  .card--interactive {
+    transition:
+      transform 0.4s var(--ease-unfold),
+      box-shadow 0.4s var(--ease-unfold),
+      border-color 0.4s var(--ease-unfold);
+  }
+  .card--interactive:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lift);
+    border-color: var(--color-gold-mid);
+  }
+
+  /* ---- Nav link (animated gold underline) ---- */
+  .nav-link {
+    position: relative;
+    font-size: 0.875rem;
+    color: var(--color-cream);
+    text-decoration: none;
+    padding-block: 0.25rem;
+    transition: color 0.2s var(--ease-unfold);
+  }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 1px;
+    width: 0;
+    background: var(--color-gold-light);
+    transition: width 0.28s var(--ease-unfold);
+  }
+  .nav-link:hover,
+  .nav-link:focus-visible {
+    color: var(--color-ivory);
+  }
+  .nav-link:hover::after,
+  .nav-link:focus-visible::after {
+    width: 100%;
+  }
+
+  /* ---- Hero stage: the box the TresJS canvas slots into (step 4) ---- */
+  .hero-stage {
+    position: relative;
+    isolation: isolate;
+  }
+  /* Soft warm glow behind the floating chair — lifts it off the dark hero and
+     does the "grounding" (the chair has no floor/shadow). Tune the alpha values
+     below for a stronger/softer glow; keep it gentle, not a spotlight. */
+  .hero-stage::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      56% 56% at 50% 50%,
+      rgba(224, 198, 144, 0.22) 0%,
+      rgba(216, 184, 120, 0.08) 46%,
+      transparent 74%
+    );
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* ---- Scroll reveal ----
+     Hidden state is gated on .js (set synchronously in <head>) so that
+     no-JS visitors and crawlers always see fully-painted content, and the
+     reduced-motion query forces everything visible with no transform. */
+  .js .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.7s var(--ease-unfold),
+      transform 0.7s var(--ease-unfold);
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+  }
+  .js .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+
+  /* ---- FAQ accordion (grid-rows height animation) ---- */
+  .faq-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.32s var(--ease-unfold);
+  }
+  .faq-panel > .faq-panel__inner {
+    overflow: hidden;
+    min-height: 0;
+  }
+  .faq-item[data-open="true"] .faq-panel {
+    grid-template-rows: 1fr;
+  }
+  .faq-marker {
+    transition: transform 0.32s var(--ease-unfold);
+  }
+}
+
+/* =============================================================================
+   QUOTE FORM — validation states & accessible errors
+   ============================================================================= */
+@layer components {
+  /* Required-field asterisk */
+  .req-star {
+    color: var(--color-error);
+    margin-left: 0.15em;
+  }
+
+  /* Honeypot — off-screen (NOT display:none, so bots still fill it), never seen
+     or focusable by real users. */
+  .hp-field {
+    position: absolute !important;
+    left: -9999px !important;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  /* Checkbox visually styled as a chip (native control kept for a11y + submit) */
+  .chip-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8125rem;
+    padding: 0.5rem 0.875rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-field);
+    background: var(--color-cloud);
+    color: var(--color-ink-soft);
+    cursor: pointer;
+    user-select: none;
+    transition: border-color 0.2s var(--ease-unfold), background-color 0.2s var(--ease-unfold);
+  }
+  .chip-check:hover {
+    border-color: var(--color-gold-mid);
+  }
+  .chip-check:has(input:checked) {
+    background: var(--color-gold);
+    border-color: var(--color-gold);
+    color: var(--color-charcoal);
+    font-weight: 500;
+  }
+  /* Focus ring on the chip when its hidden checkbox is focused */
+  .chip-check:has(input:focus-visible) {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+  }
+  .chip-check:has(input:focus-visible:checked) {
+    outline-color: var(--color-charcoal);
+  }
+
+  /* Invalid field outline */
+  .field[aria-invalid="true"] {
+    border-color: var(--color-error);
+  }
+  .field[aria-invalid="true"]:focus {
+    outline-color: var(--color-error);
+    border-color: var(--color-error);
+  }
+
+  /* Inline field error (icon + text — never colour alone) */
+  .field-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+    margin-top: 0.4rem;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    font-weight: 500;
+    color: var(--color-error);
+  }
+  .field-error svg {
+    flex: none;
+    width: 0.9rem;
+    height: 0.9rem;
+    margin-top: 0.05rem;
+  }
+
+  /* Error summary at top of form */
+  .error-summary {
+    border: 1px solid var(--color-error-border);
+    background: var(--color-error-surface);
+    border-radius: var(--radius-card);
+    padding: 1rem 1.1rem;
+    margin-bottom: 1.25rem;
+  }
+  .error-summary:focus-visible {
+    outline: 2px solid var(--color-error);
+    outline-offset: 2px;
+  }
+  .error-summary__title {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-error);
+    margin: 0;
+  }
+  .error-summary a {
+    color: var(--color-error);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  /* Submit-time error (network/backend) */
+  .submit-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--color-error-border);
+    background: var(--color-error-surface);
+    border-radius: var(--radius-field);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-error);
+  }
+  .submit-error:focus-visible {
+    outline: 2px solid var(--color-error);
+    outline-offset: 2px;
+  }
+
+  /* Subtle shake on the error summary — motion users only */
+  @media (prefers-reduced-motion: no-preference) {
+    .error-summary[data-shake="true"] {
+      animation: field-shake 0.4s var(--ease-unfold);
+    }
+  }
+  @keyframes field-shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-5px); }
+    40% { transform: translateX(5px); }
+    60% { transform: translateX(-3px); }
+    80% { transform: translateX(3px); }
+  }
+}
+
+/* =============================================================================
+   HERO — 3D canvas / poster overlay (normal-height hero; no pin/track)
+   .hero-anim is set pre-paint by the head script ONLY for capable desktops and
+   gates the canvas + hides the poster there. The chair rotates with scroll, so
+   there is no sticky pin and the hero keeps normal height on every path.
+   ============================================================================= */
+@layer components {
+  /* TresJS canvas overlays the poster inside the same .hero-stage box (no shift) */
+  .hero-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.45s var(--ease-unfold);
+  }
+  .hero-canvas[data-ready="true"] {
+    opacity: 1;
+  }
+  .hero-canvas canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  /* Poster = the static OPEN SVG. It stays visible on every FALLBACK path
+     (reduced-motion / mobile / no-WebGL). On the ANIMATED path it is hidden from
+     the first paint (via the pre-paint .hero-anim class) so the open chair never
+     flashes; the canvas fades in once its settled CLOSED-chair frame has painted. */
+  .hero-poster {
+    z-index: 0;
+  }
+  .hero-anim .hero-poster {
+    opacity: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-canvas {
+      transition: none;
+    }
+  }
+}
+
