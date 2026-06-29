@@ -1,45 +1,24 @@
-<script setup lang="ts">
-import FoldEyebrow from "./FoldEyebrow.vue";
-
-const steps = [
-  { n: "01", title: "Tell us about your event", desc: "Date, guest count, and the pieces you love." },
-  { n: "02", title: "We build your quote", desc: "Itemized and sent within one business day." },
-  { n: "03", title: "We deliver & set", desc: "On time, styled, and collected after." },
-];
-
-const itemOptions = ["Tables", "Chairs", "Linens", "Lounge", "Bar", "Dance floor"];
-
-const {
-  form,
-  errors,
-  status,
-  submitError,
-  submitAttempted,
-  shake,
-  enhanced,
-  minDate,
-  summaryRef,
-  confirmationRef,
-  submitErrorRef,
-  summaryErrors,
-  hasErrors,
-  isSubmitting,
-  handleBlur,
-  handleInput,
-  handleItemsChange,
-  handleSubmit,
-  focusField,
-  resetForm,
-} = useQuoteForm();
-</script>
-
 <template>
-  <section id="quote" class="scroll-anchor bg-sand py-20 lg:py-28" aria-labelledby="quote-heading">
+  <section
+    id="quote"
+    class="scroll-anchor bg-sand py-20 lg:py-28"
+    aria-labelledby="quote-heading"
+  >
     <div class="shell grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
       <!-- Left: pricing / process (unchanged from step 2) -->
-      <div v-reveal class="reveal">
-        <FoldEyebrow number="02" label="Pricing & Quote" class="mb-7" />
-        <h2 id="quote-heading" class="max-w-md font-display text-4xl leading-[1.04] lg:text-[46px]">
+      <div
+        v-reveal
+        class="reveal"
+      >
+        <FoldEyebrow
+          number="02"
+          label="Pricing & Quote"
+          class="mb-7"
+        />
+        <h2
+          id="quote-heading"
+          class="max-w-md font-display text-4xl leading-[1.04] lg:text-[46px]"
+        >
           Transparent pricing, tailored to your day.
         </h2>
         <p class="mt-5 max-w-md text-base leading-relaxed text-muted">
@@ -54,10 +33,19 @@ const {
             class="flex gap-5 border-t border-[#d9d1c1] py-5"
             :class="{ 'border-b': i === steps.length - 1 }"
           >
-            <span class="font-display text-[22px] leading-none text-gold" aria-hidden="true">{{ s.n }}</span>
+            <span
+              class="font-display text-[22px] leading-none text-gold"
+              aria-hidden="true"
+            >
+              {{ s.n }}
+            </span>
             <div>
-              <p class="text-[15px] font-semibold text-ink">{{ s.title }}</p>
-              <p class="mt-1.5 text-[13px] leading-relaxed text-muted">{{ s.desc }}</p>
+              <p class="text-[15px] font-semibold text-ink">
+                {{ s.title }}
+              </p>
+              <p class="mt-1.5 text-[13px] leading-relaxed text-muted">
+                {{ s.desc }}
+              </p>
             </div>
           </li>
         </ol>
@@ -67,7 +55,10 @@ const {
       </div>
 
       <!-- Right: quote form -->
-      <div v-reveal="80" class="reveal">
+      <div
+        v-reveal="80"
+        class="reveal"
+      >
         <!-- Confirmation (replaces the form on success) -->
         <div
           v-if="status === 'success'"
@@ -77,7 +68,11 @@ const {
             class="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-gold/15"
             aria-hidden="true"
           >
-            <svg viewBox="0 0 24 24" fill="none" class="h-7 w-7 text-gold-ink">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              class="h-7 w-7 text-gold-ink"
+            >
               <path
                 d="M5 12.5l4.5 4.5L19 7.5"
                 stroke="currentColor"
@@ -87,11 +82,15 @@ const {
               />
             </svg>
           </span>
-          <h3 ref="confirmationRef" tabindex="-1" class="font-display text-[26px] leading-tight text-ink">
+          <h3
+            ref="confirmationRef"
+            tabindex="-1"
+            class="font-display text-[26px] leading-tight text-ink"
+          >
             Request received
           </h3>
           <p class="mx-auto mt-3 max-w-sm text-[15px] leading-relaxed text-muted">
-            Thanks{{ form.name ? `, ${form.name}` : "" }} — we'll reply within one business day with an
+            Thanks{{ form.name ? `, ${form.name}` : '' }} — we'll reply within one business day with an
             itemized quote.
           </p>
           <button
@@ -115,21 +114,36 @@ const {
         >
           <!-- Spam guards: honeypot (only bots fill it) + a render-time stamp
                (time-trap). Hidden from users + assistive tech, not tabbable. -->
-          <div class="hp-field" aria-hidden="true">
-            <label
-              >Company URL
+          <div
+            class="hp-field"
+            aria-hidden="true"
+          >
+            <label>
+              Company URL
               <input
                 v-model="form.company_url"
                 type="text"
                 name="company_url"
                 tabindex="-1"
                 autocomplete="off"
-            /></label>
+              />
+            </label>
           </div>
-          <input type="hidden" name="form_ts" :value="form.form_ts" />
+          <input
+            type="hidden"
+            name="form_ts"
+            :value="form.form_ts"
+          />
 
-          <h3 id="quote-form-heading" class="font-display text-[26px] leading-none text-ink">Request a quote</h3>
-          <p class="mt-2 text-[13px] text-muted">We reply within one business day.</p>
+          <h3
+            id="quote-form-heading"
+            class="font-display text-[26px] leading-none text-ink"
+          >
+            Request a quote
+          </h3>
+          <p class="mt-2 text-[13px] text-muted">
+            We reply within one business day.
+          </p>
           <p class="mt-1 text-xs text-faint">
             Fields marked <span class="req-star" aria-hidden="true">*</span> are required.
           </p>
@@ -144,13 +158,24 @@ const {
             :data-shake="shake ? 'true' : 'false'"
             aria-labelledby="error-summary-title"
           >
-            <p id="error-summary-title" class="error-summary__title">
+            <p
+              id="error-summary-title"
+              class="error-summary__title"
+            >
               <IconAlert class="h-4 w-4 shrink-0" />
               Please fix the following:
             </p>
             <ul class="mt-2 list-disc space-y-1 pl-5 text-[13px]">
-              <li v-for="err in summaryErrors" :key="err.key">
-                <a :href="`#${err.id}`" @click.prevent="focusField(err.id)">{{ err.message }}</a>
+              <li
+                v-for="err in summaryErrors"
+                :key="err.key"
+              >
+                <a
+                  :href="`#${err.id}`"
+                  @click.prevent="focusField(err.id)"
+                >
+                  {{ err.message }}
+                </a>
               </li>
             </ul>
           </div>
@@ -158,7 +183,12 @@ const {
           <!-- Date + guests -->
           <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <label for="qf-date" class="label">Event date <span class="req-star" aria-hidden="true">*</span></label>
+              <label
+                for="qf-date"
+                class="label"
+              >
+                Event date <span class="req-star" aria-hidden="true">*</span>
+              </label>
               <input
                 id="qf-date"
                 v-model="form.eventDate"
@@ -173,12 +203,21 @@ const {
                 @blur="handleBlur('eventDate')"
                 @input="handleInput('eventDate')"
               />
-              <p v-if="errors.eventDate" id="qf-date-error" class="field-error">
+              <p
+                v-if="errors.eventDate"
+                id="qf-date-error"
+                class="field-error"
+              >
                 <IconAlert /> {{ errors.eventDate }}
               </p>
             </div>
             <div>
-              <label for="qf-guests" class="label">Guest count <span class="req-star" aria-hidden="true">*</span></label>
+              <label
+                for="qf-guests"
+                class="label"
+              >
+                Guest count <span class="req-star" aria-hidden="true">*</span>
+              </label>
               <input
                 id="qf-guests"
                 v-model="form.guests"
@@ -196,7 +235,11 @@ const {
                 @blur="handleBlur('guests')"
                 @input="handleInput('guests')"
               />
-              <p v-if="errors.guests" id="qf-guests-error" class="field-error">
+              <p
+                v-if="errors.guests"
+                id="qf-guests-error"
+                class="field-error"
+              >
                 <IconAlert /> {{ errors.guests }}
               </p>
             </div>
@@ -207,9 +250,15 @@ const {
             class="mt-4 border-0 p-0"
             :aria-describedby="errors.items ? 'qf-items-error' : undefined"
           >
-            <legend class="label">Items needed <span class="req-star" aria-hidden="true">*</span></legend>
+            <legend class="label">
+              Items needed <span class="req-star" aria-hidden="true">*</span>
+            </legend>
             <div class="flex flex-wrap gap-2">
-              <label v-for="(item, i) in itemOptions" :key="item" class="chip-check">
+              <label
+                v-for="(item, i) in itemOptions"
+                :key="item"
+                class="chip-check"
+              >
                 <input
                   :id="`qf-item-${i}`"
                   v-model="form.items"
@@ -219,17 +268,26 @@ const {
                   :value="item"
                   @change="handleItemsChange"
                 />
-                <span>{{ item }}</span>
+                <span>
+                  {{ item }}
+                </span>
               </label>
             </div>
-            <p v-if="errors.items" id="qf-items-error" class="field-error">
+            <p
+              v-if="errors.items"
+              id="qf-items-error"
+              class="field-error"
+            >
               <IconAlert /> {{ errors.items }}
             </p>
           </fieldset>
 
           <!-- Address -->
           <div class="mt-4">
-            <label for="qf-address" class="label">
+            <label
+              for="qf-address"
+              class="label"
+            >
               Delivery address <span class="req-star" aria-hidden="true">*</span>
             </label>
             <input
@@ -247,14 +305,23 @@ const {
               @blur="handleBlur('address')"
               @input="handleInput('address')"
             />
-            <p v-if="errors.address" id="qf-address-error" class="field-error">
+            <p
+              v-if="errors.address"
+              id="qf-address-error"
+              class="field-error"
+            >
               <IconAlert /> {{ errors.address }}
             </p>
           </div>
 
           <!-- Name -->
           <div class="mt-4">
-            <label for="qf-name" class="label">Full name <span class="req-star" aria-hidden="true">*</span></label>
+            <label
+              for="qf-name"
+              class="label"
+            >
+              Full name <span class="req-star" aria-hidden="true">*</span>
+            </label>
             <input
               id="qf-name"
               v-model="form.name"
@@ -270,7 +337,11 @@ const {
               @blur="handleBlur('name')"
               @input="handleInput('name')"
             />
-            <p v-if="errors.name" id="qf-name-error" class="field-error">
+            <p
+              v-if="errors.name"
+              id="qf-name-error"
+              class="field-error"
+            >
               <IconAlert /> {{ errors.name }}
             </p>
           </div>
@@ -278,7 +349,12 @@ const {
           <!-- Email + phone -->
           <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <label for="qf-email" class="label">Email <span class="req-star" aria-hidden="true">*</span></label>
+              <label
+                for="qf-email"
+                class="label"
+              >
+                Email <span class="req-star" aria-hidden="true">*</span>
+              </label>
               <input
                 id="qf-email"
                 v-model="form.email"
@@ -294,12 +370,21 @@ const {
                 @blur="handleBlur('email')"
                 @input="handleInput('email')"
               />
-              <p v-if="errors.email" id="qf-email-error" class="field-error">
+              <p
+                v-if="errors.email"
+                id="qf-email-error"
+                class="field-error"
+              >
                 <IconAlert /> {{ errors.email }}
               </p>
             </div>
             <div>
-              <label for="qf-phone" class="label">Phone <span class="req-star" aria-hidden="true">*</span></label>
+              <label
+                for="qf-phone"
+                class="label"
+              >
+                Phone <span class="req-star" aria-hidden="true">*</span>
+              </label>
               <input
                 id="qf-phone"
                 v-model="form.phone"
@@ -316,7 +401,11 @@ const {
                 @blur="handleBlur('phone')"
                 @input="handleInput('phone')"
               />
-              <p v-if="errors.phone" id="qf-phone-error" class="field-error">
+              <p
+                v-if="errors.phone"
+                id="qf-phone-error"
+                class="field-error"
+              >
                 <IconAlert /> {{ errors.phone }}
               </p>
             </div>
@@ -324,7 +413,12 @@ const {
 
           <!-- Notes (optional) -->
           <div class="mt-4">
-            <label for="qf-notes" class="label">Event details <span class="font-normal text-faint">(optional)</span></label>
+            <label
+              for="qf-notes"
+              class="label"
+            >
+              Event details <span class="font-normal text-faint">(optional)</span>
+            </label>
             <textarea
               id="qf-notes"
               v-model="form.notes"
@@ -342,17 +436,42 @@ const {
             :aria-busy="isSubmitting ? 'true' : undefined"
           >
             <template v-if="isSubmitting">
-              <svg viewBox="0 0 24 24" fill="none" class="h-4 w-4 animate-spin" aria-hidden="true">
-                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="3" opacity="0.25" />
-                <path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                class="h-4 w-4 animate-spin"
+                aria-hidden="true"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="9"
+                  stroke="currentColor"
+                  stroke-width="3"
+                  opacity="0.25"
+                />
+                <path
+                  d="M21 12a9 9 0 0 0-9-9"
+                  stroke="currentColor"
+                  stroke-width="3"
+                  stroke-linecap="round"
+                />
               </svg>
               Sending…
             </template>
-            <template v-else>Request my quote →</template>
+            <template v-else>
+              Request my quote →
+            </template>
           </button>
 
           <!-- Submit-time (network/backend) error -->
-          <p v-if="status === 'error'" ref="submitErrorRef" tabindex="-1" role="alert" class="submit-error">
+          <p
+            v-if="status === 'error'"
+            ref="submitErrorRef"
+            tabindex="-1"
+            role="alert"
+            class="submit-error"
+          >
             <IconAlert class="h-4 w-4 shrink-0" /> {{ submitError }}
           </p>
         </form>
@@ -360,3 +479,44 @@ const {
     </div>
   </section>
 </template>
+
+<script setup lang="ts">
+const steps = [{
+  n: '01',
+  title: 'Tell us about your event',
+  desc: 'Date, guest count, and the pieces you love.'
+}, {
+  n: '02',
+  title: 'We build your quote',
+  desc: 'Itemized and sent within one business day.'
+}, {
+  n: '03',
+  title: 'We deliver & set',
+  desc: 'On time, styled, and collected after.'
+}];
+
+const itemOptions = ['Tables', 'Chairs', 'Linens', 'Lounge', 'Bar', 'Dance floor'];
+
+const {
+  form,
+  errors,
+  status,
+  submitError,
+  submitAttempted,
+  shake,
+  enhanced,
+  minDate,
+  summaryRef,
+  confirmationRef,
+  submitErrorRef,
+  summaryErrors,
+  hasErrors,
+  isSubmitting,
+  handleBlur,
+  handleInput,
+  handleItemsChange,
+  handleSubmit,
+  focusField,
+  resetForm
+} = useQuoteForm();
+</script>

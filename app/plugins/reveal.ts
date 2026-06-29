@@ -1,4 +1,4 @@
-import type { Directive } from "vue";
+import type { Directive } from 'vue';
 
 /**
  * v-reveal — fades/slides an element into view once, when it enters the viewport.
@@ -13,13 +13,13 @@ const reveal: Directive<HTMLElement, number | undefined> = {
   mounted(el, binding) {
     if (import.meta.server) return;
 
-    if (typeof binding.value === "number" && binding.value > 0) {
-      el.style.setProperty("--reveal-delay", `${binding.value}ms`);
+    if (typeof binding.value === 'number' && binding.value > 0) {
+      el.style.setProperty('--reveal-delay', `${binding.value}ms`);
     }
 
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced || typeof IntersectionObserver === "undefined") {
-      el.classList.add("is-visible");
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced || typeof IntersectionObserver === 'undefined') {
+      el.classList.add('is-visible');
       return;
     }
 
@@ -27,12 +27,15 @@ const reveal: Directive<HTMLElement, number | undefined> = {
       (entries, obs) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
+            entry.target.classList.add('is-visible');
             obs.unobserve(entry.target);
           }
         }
       },
-      { rootMargin: "0px 0px -10% 0px", threshold: 0.08 },
+      {
+        rootMargin: '0px 0px -10% 0px',
+        threshold: 0.08
+      }
     );
     io.observe(el);
     (el as HTMLElement & { _revealIO?: IntersectionObserver })._revealIO = io;
@@ -40,9 +43,9 @@ const reveal: Directive<HTMLElement, number | undefined> = {
   unmounted(el) {
     const io = (el as HTMLElement & { _revealIO?: IntersectionObserver })._revealIO;
     io?.disconnect();
-  },
+  }
 };
 
 export default defineNuxtPlugin((nuxtApp) => {
-  nuxtApp.vueApp.directive("reveal", reveal);
+  nuxtApp.vueApp.directive('reveal', reveal);
 });

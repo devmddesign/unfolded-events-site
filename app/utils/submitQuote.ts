@@ -19,8 +19,8 @@ export interface QuotePayload {
 export class QuoteValidationError extends Error {
   fieldErrors: Record<string, string>;
   constructor(fieldErrors: Record<string, string>) {
-    super("Quote validation failed");
-    this.name = "QuoteValidationError";
+    super('Quote validation failed');
+    this.name = 'QuoteValidationError';
     this.fieldErrors = fieldErrors;
   }
 }
@@ -38,12 +38,15 @@ export class QuoteValidationError extends Error {
  *
  *  To change provider/destination, edit server/api/quote.post.ts — not here.
  */
-export async function submitQuote(payload: QuotePayload): Promise<{ ok: true }> {
+export const submitQuote = async (payload: QuotePayload): Promise<{ ok: true }> => {
   try {
-    return await $fetch<{ ok: true }>("/api/quote", {
-      method: "POST",
-      headers: { "X-Requested-With": "XMLHttpRequest", Accept: "application/json" },
-      body: payload,
+    return await $fetch<{ ok: true }>('/api/quote', {
+      method: 'POST',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        Accept: 'application/json'
+      },
+      body: payload
     });
   } catch (e: unknown) {
     const err = e as {
@@ -54,7 +57,7 @@ export async function submitQuote(payload: QuotePayload): Promise<{ ok: true }> 
     const status = err?.statusCode ?? err?.response?.status;
     if (status === 422 && err?.data?.errors) throw new QuoteValidationError(err.data.errors);
     throw new Error(
-      "We couldn’t send your request just now. Please try again, or call (240) 555-0142.",
+      'We couldn\'t send your request just now. Please try again, or call (240) 555-0142.'
     );
   }
-}
+};
